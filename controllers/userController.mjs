@@ -46,9 +46,9 @@ class UserController {
         // Якщо валідація пройшла успішно, виконуємо логіку реєстрації
         const errors = validationResult(req)
         const data = req.body
-        console.log(data)
+   
         const types = await TypesDBService.getList()
-        console.log(types)
+  
         if (!errors.isEmpty()) {
             if (req.params.id) data.id = req.params.id
             return res.status(400).render('register', {

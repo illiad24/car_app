@@ -8,7 +8,7 @@ class CarsController {
     static async showCars(req, res) {
         try {
             const dataList = await CarsDBService.getList()
-            console.log(dataList)
+     
             res.render('cars/carsList', {
                 cars: dataList,
                 user: req.user,
@@ -23,7 +23,7 @@ class CarsController {
             const id = req.params.id
 
             const car = await CarsDBService.getById(id, ['dealer'])
-            console.log(car)
+        
             res.render('cars/carDetails', { car, user: req.user, })
         } catch (err) {
             res.status(500).json({ error: err.message })
@@ -40,11 +40,9 @@ class CarsController {
         if (req.file?.buffer) {
             data.carImg = req.file.buffer.toString('base64')
         }
-        console.log('data')
-        console.log(data)
+  
         const dealerList = await DealerDBService.getList()
-        console.log('===============dealerList')
-        console.log(dealerList)
+
         if (!errors.isEmpty()) {
             if (req.params.id) data.id = req.params.id
             return res.status(400).render('cars/carsForm', {
@@ -103,7 +101,6 @@ class CarsController {
                 car = await CarsDBService.getById(id)
                 car.id = id
             }
-            console.log(car)
             const dealerList = await DealerDBService.getList()
             res.render('cars/carsForm', {
                 car, errors: {}, dealerList, user: req.user,
