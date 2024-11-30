@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <%- include('../sections/header') %>
+
+<div class="container">
+
+    <div class="git__body">
+        <h2 class="git__title title-bg"><%= car?.id ? 'Редагувати товар' : 'Додати товар' %></h2>
+        <% if (errors?.length > 0) { %>
+            <ul>
+              <% errors.forEach(function(error) { %>
+              <li><%= error.msg %></li>
+              <% }) %>
+            </ul>
+            <hr />
+            <% } %>
+        <form enctype="multipart/form-data" action="<%= car?.id ? '/cars/edit/' + car.id  : '/cars/create' %>" method="post">
+            <div class="form-git__body">
+                <div class="form-git__block">
+                   
+                        <div class="form-git__item">
+                            <div class="form-git__label label-form">
+                                Марка машини <span>*</span>
+                            </div>
+                            <div class="form-git__line">
+                                <input  name="title" placeholder="Марка машини" class="input form-git__input" value="<%= car ? car.title : '' %>">
+                            </div>
+                        </div>
+                        <div class="form-git__item">
+                            <div class="form-git__label label-form">
+                                Рік випуску <span>*</span>
+                            </div>
+                            <div class="form-git__line">
+                                <input  name="year" placeholder=" Рік випуску" class="input form-git__input" value="<%= car ? car.year : '' %>">
+                            </div>
+                        </div>
+                        <div class="form-git__item">
+                            <div class="form-git__label label-form">
+                                Ціна <span>*</span>
+                            </div>
+                            <div class="form-git__line">
+                                <input  name="price" placeholder="Ціна" class="input form-git__input" value="<%= car ? car.price : '' %>">
+                            </div>
+                        </div>
+                        <div class="form-git__item">
+                            <div class="form-git__label label-form">
+                                Фото <span>*</span>
+                            </div>
+                            <div class="form-git__line">
+                                <input type="file" name="carImg" class="input form-git__input" /></div>
+                        </div>
+                   
+                </div>
+                <% if (dealerList?.length > 0) { %>
+                <div class="form-git__item">
+                    <div class="form-git__label label-form">
+                      Дилер <span>*</span>
+                    </div>
+                    <select name="dealer">
+                        <% dealerList.forEach(dealer => { %>
+                            <option value="<%= dealer._id %>"><%= dealer.dealerName %></option>
+                          <% }) %>
+                       </select>
+                </div>
+                <% } %>
+            </div>
+            <div class="actions">
+
+                <button type="submit" class="form-git__button button  button--black " value="save"><%= car?.id ? 'Оновити' : 'Додати' %></button>
+            </div>
+        </form>
+    </div>
+
+</div>
+  </body>
+</html>

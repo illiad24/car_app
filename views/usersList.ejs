@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="/javascripts/RequestManager.js"></script>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <%- include('sections/header', { title: 'User List' }) %>
+    <hr />
+    <form action="/users" method="get">
+      <input type="text" name="name" placeholder="Name" />
+      <button type="submit">Filter</button>
+      <a href="/users"> <button>Clear filters</button> </a>
+    </form>
+    <hr />
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+        
+          <th>Type</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(user => { %>
+        <tr>
+          <td><img src="<%= user.img %>" /></td>
+          <td><%= user.username %></td>
+          <td><%= user.type.title %></td>
+          <td><%= user.email %></td>
+          <td>
+            <a href="/users/register/<%= user._id %>">Edit</a>
+            <button
+              onclick="RequestManager.deleteRequest('/users', '<%= user._id %>' )"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <hr />
+    <a href="/users/register">Додати користувача</a>
+  </body>
+</html>

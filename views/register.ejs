@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register page</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/javascripts/RequestManager.js"></script>
+    <script>
+      function onFileInput(event) {
+        RequestManager.handleFileSelect(event, '#imgPreview')
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+
+   
+    <%- include('sections/header', { title: 'User form' }) %>
+    <hr />
+    <% if (errors?.length > 0) { %>
+    <ul>
+      <% errors.forEach(function(error) { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+    <hr />
+    <% } %>
+    <!-- enctype="multipart/form-data" -->
+    
+    <form  action="/users/register<%= data?.id ? '/' + data.id : '' %>" method="post">
+        <div class="form-git__body">
+            <div class="form-git__block">
+               
+                    <div class="form-git__item">
+                        <div class="form-git__label label-form">
+                            Ім'я <span>*</span>
+                        </div>
+                        <div class="form-git__line">
+                            <input
+                            type="text"
+                            name="username"
+                            placeholder="Name"
+                            value="<%= data ? data.username : '' %>"
+                            class="input form-git__input"
+                          />
+                        </div>
+                    </div>
+                    <div class="form-git__item">
+                        <div class="form-git__label label-form">
+                            Email <span>*</span>
+                        </div>
+                        <div class="form-git__line">
+                            <input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            class="input form-git__input"
+                            value="<%= data ? data.email : '' %>"
+                          />
+                        </div>
+                    </div>
+                    <div class="form-git__item">
+                        <div class="form-git__label label-form">
+                            Пароль <span>*</span>
+                        </div>
+                        <div class="form-git__line">
+                            <input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            class="input form-git__input"
+                            value="<%= data ? data.password : '' %>"
+                          />
+                        </div>
+                    </div>
+               
+            </div>
+            <% if (types?.length > 0) { %>
+            <div class="form-git__item">
+                <div class="form-git__label label-form">
+                  Тип <span>*</span>
+                </div>
+                <select name="type">
+                    <% types.forEach(type => { %>
+                        <option value="<%= type._id%>"><%= type.title%></option>
+                        <%})%>
+                   </select>
+            </div>
+            <% } %>
+        </div>
+        <div class="actions">
+            <button type="submit" class="form-git__button button  button--black " value="save">Register</button>
+        </div>
+    </form>
+</div>
+  </body>
+</html>

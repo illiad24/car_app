@@ -1,0 +1,15 @@
+<header class="main-menu">
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/cars">Cars List</a></li>
+      <% if (user ) { %>
+        <li><a href="/users">Users List</a></li>
+        <% } %> <% if (user) { %>
+        <li><a href="/auth/logout">Logout (<%= user.username %>)</a></li>
+        <% } else { %>
+        <li><a href="/auth/login">Login</a></li>
+        <% } %>
+    </ul>
+  </nav>
+</header>

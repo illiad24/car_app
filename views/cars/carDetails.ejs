@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <title>Document</title>
+</head>
+<body>
+    <%- include('../sections/header') %>
+<div class="container">
+<h1>Деталі автомобіля <%=car.title%></h1>
+    <div class="item">
+        <div class="item__image">
+            <img src="data:image;base64,<%=car.carImg%>" alt="Image">
+        </div>
+        <div class="item__content">
+            
+            <a href="/cars/<%=car.id%>" target="_blank" class="item__title"><%=car.title%> </a>
+            <div class="content-cart__info">
+                <div class="content-cart__item">
+                    <div class="content-cart__label">Year</div>
+                    <div class="content-cart__price"><%=car.year%></div>
+                </div>
+                <div class="content-cart__item">
+                    <div class="content-cart__label">Price</div>
+                    <div class="content-cart__price"><%=car.price%></div>
+                </div>
+                <div class="content-cart__item">
+                    <div class="content-cart__label">Dealer</div>
+                    <div class="content-cart__price"><%=car.dealer?.dealerName %></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+        
+</body>
+</html>

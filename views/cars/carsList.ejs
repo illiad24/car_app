@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <title>Document</title>
+    <script src="/javascripts/RequestManager.js"></script>
+</head>
+<body>
+    <%- include('../sections/header') %>
+
+     <div class="container">
+        <div class="title">Car List</div>
+         <div class="items">
+             <%cars.forEach(car=>{%>
+                <div class="cart-item  " >
+                    <div class="cart-item__block">
+                        <div class="cart-item__image">
+                            <img src="data:image;base64,<%=car.carImg%>" alt="Image">
+                        </div>
+                        <div class="cart-item__actions">
+                            <% if (user ) { %>
+                            <a href="/cars/edit/<%=car._id%>" type="button" class="cart-item__act">Edit</a>
+                            <button  onclick="RequestManager.deleteRequest('/cars', '<%= car._id %>' )" class="cart-item__act" >Delete</button>
+                            <% } %>
+                            <a href="/cars/<%=car._id%>" class="cart-item__act cart-item__act--transparent">More Details</a>
+                        </div>
+                    </div>
+                    <div class="cart-item__content content-cart">
+                        <a href="/cars/<%=car._id%>" class="content-cart__title"><%=car.title%> </a>
+                        <div class="content-cart__info">
+                            <div class="content-cart__item">
+                                <div class="content-cart__label">Year</div>
+                                <div class="content-cart__price"><%=car.year%></div>
+                            </div>
+                            <div class="content-cart__item">
+                                <div class="content-cart__label">Price</div>
+                                <div class="content-cart__price"><%=car.price%></div>
+                            </div>
+                            <div class="content-cart__item">
+                                <div class="content-cart__label">Dealer</div>
+                                <div class="content-cart__price"><%=car.dealer?.dealerName %></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <%})%>
+
+         </div>
+         <% if (user ) { %>
+         <div class="actions">
+             <a href="/cars/create" class="button button--center">add car</a>
+            </div>
+            <% } %>
+         <br>
+       
+
+      
+     </div>
+</body>
+</html>
