@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <div class="container">
+        <h1>Sign Up</h1>
+        <form  action="/auth/signup" method="post">
+            <div class="form-git__body">
+                <div class="form-git__block">
+                    <div class="form-git__item">
+                        <div class="form-git__label label-form">
+                            Ім'я <span>*</span>
+                        </div>
+                        <div class="form-git__line">
+                        <input type="text" name="username" id="name" value="<%= formData ? formData.username : '' %>"  required class="input form-git__input" />
+                      </div>
+                    </div>
+                        <div class="form-git__item">
+                            <div class="form-git__label label-form">
+                                Email <span>*</span>
+                            </div>
+                            <div class="form-git__line">
+                                <input type="email" name="email" id="email" value="<%= formData ? formData.email : '' %>" required class="input form-git__input" />
+                            </div>
+                        </div>
+                        <div class="form-git__item">
+                            <div class="form-git__label label-form">
+                                Пароль <span>*</span>
+                            </div>
+                            <div class="form-git__line">
+                                    <input type="password" name="password" id="password" required class="input form-git__input" />
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="actions">
+                <button type="submit" class="form-git__button button  button--black " value="save">Login</button>
+                <a href="/auth/login"  class="form-git__button button  button--black " value="save">Login</a>
+            </div>
+        </form>
+
+    </div>
+
+    <% if (errors?.length > 0) { %>
+        <ul>
+          <% errors.forEach(function(error) { %>
+          <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+        <hr />
+        <% } %>
+  </body>
+</html>

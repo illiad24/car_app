@@ -60,6 +60,7 @@
                           />
                         </div>
                     </div>
+                    <%  if(!data?.id) {%>
                     <div class="form-git__item">
                         <div class="form-git__label label-form">
                             Пароль <span>*</span>
@@ -70,11 +71,40 @@
                             name="password"
                             placeholder="Password"
                             class="input form-git__input"
-                            value="<%= data ? data.password : '' %>"
+                           
                           />
                         </div>
                     </div>
-               
+                    <%  } else {%>
+                    <div class="form-git__item">
+                        <div class="form-git__label label-form">
+                            Старий пароль <span>*</span>
+                        </div>
+                        <div class="form-git__line">
+                            <input
+                            type="password"
+                            name="passwordNew"
+                            placeholder="Password"
+                            class="input form-git__input"
+                           
+                          />
+                        </div>
+                    </div>
+                    <div class="form-git__item">
+                        <div class="form-git__label label-form">
+                            Новий пароль <span>*</span>
+                        </div>
+                        <div class="form-git__line">
+                            <input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            class="input form-git__input"
+                           
+                          />
+                        </div>
+                    </div>
+                    <% }%>
             </div>
             <% if (types?.length > 0) { %>
             <div class="form-git__item">

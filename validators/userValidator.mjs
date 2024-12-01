@@ -17,14 +17,14 @@ class UserValidator {
             },
             normalizeEmail: true, // Нормалізує email
         },
-        password: {
-            isLength: {
-                options: { min: 3 },
-                errorMessage: 'Password must be at least 3 characters long',
-            },
-            trim: true, // Видаляє пробіли на початку і в кінці
-            escape: true, // Екранує HTML символи
-        },
+        // password: {
+        //     isLength: {
+        //         options: { min: 3 },
+        //         errorMessage: 'Password must be at least 3 characters long',
+        //     },
+        //     trim: true, // Видаляє пробіли на початку і в кінці
+        //     escape: true, // Екранує HTML символи
+        // },
         username: {
             notEmpty: {
                 errorMessage: 'Name is required',
