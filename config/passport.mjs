@@ -5,23 +5,26 @@ import UsersDBService from '../models/user/UsersDBService.mjs'
 
 // Налаштування локальної стратегії
 passport.use(
-    new LocalStrategy(async (username, password, done) => {
-        try {
-            const user = await UsersDBService.findOne({ username }, {}, ['type'])
-     
-            if (!user) {
-                return done(null, false, { message: 'Incorrect name or password.' })
+    new LocalStrategy(
+        { usernameField: "email", passwordField: "password" },
+        async (email, password, done) => {
+            try {
+                console.log(password)
+                const user = await UsersDBService.findOne({ email }, {}, ['type'])
+                console.log(user)
+                if (!user) {
+                    return done(null, false, { message: 'Incorrect email or password.' })
+                }
+                const isMatch = await bcrypt.compare(password, user.password)
+
+                if (!isMatch) {
+                    return done(null, false, { message: 'Incorrect email or password.' })
+                }
+                return done(null, user)
+            } catch (error) {
+                return done(error)
             }
-            const isMatch = await bcrypt.compare(password, user.password)
-       
-            if (!isMatch) {
-                return done(null, false, { message: 'Incorrect name or password.' })
-            }
-            return done(null, user)
-        } catch (error) {
-            return done(error)
-        }
-    })
+        })
 )
 
 // Серіалізація користувача
