@@ -11,7 +11,7 @@ class UserController {
             }
 
             const dataList = await UsersDBService.getList(filters)
-            console.log(dataList)
+
             const hasType = dataList.some(user => user.type); // Перевіряємо, чи є хоча б один користувач з типом
 
             res.render('usersList', {
@@ -64,48 +64,53 @@ class UserController {
 
         try {
             const dataObj = req.body;
-
-            // Перевірка, чи надано новий пароль
-            if (dataObj.password && dataObj.password !== '') {
-                // Якщо пароль є, хешуємо його перед збереженням
-                const salt = await bcrypt.genSalt(10);
-                dataObj.password = await bcrypt.hash(dataObj.password, salt);
-            } else {
-                // Якщо пароль порожній, не змінюємо його
-                delete dataObj.password;
-            }
-
-            // Перевірка наявності старого пароля
-            if (dataObj.passwordNew && dataObj.passwordNew !== '') {
-                // Тут можна додати перевірку старого пароля, наприклад:
-                const user = await UsersDBService.getById(req.params.id); // Отримуємо користувача за id
-                const match = await bcrypt.compare(dataObj.passwordNew, user.password);
-
-                if (!match) {
-                    if (req.params.id) data.id = req.params.id
-                    return res.status(400).render('register', {
-                        errors: [{ msg: 'Old password is incorrect.' }],
-                        data,
-                        types,
-                        user: req.user,
-                    });
-                }
-
-                // Якщо старий пароль вірний, хешуємо новий
-                const salt = await bcrypt.genSalt(10);
-                dataObj.password = await bcrypt.hash(dataObj.passwordNew, salt);
-                delete dataObj.passwordNew; // Видаляємо поле старого пароля після обробки
-            }
+            console.log(dataObj);
 
             if (req.params.id) {
-                // Оновлюємо дані про користувача в базі даних
-                await UsersDBService.update(req.params.id, dataObj);
-            } else {
-                // Додаємо користувача в базу даних
-                await UsersDBService.create(dataObj);
-            }
+                // Отримуємо користувача з бази даних для перевірки старого пароля
+                const user = await UsersDBService.getById(req.params.id);
 
-            res.redirect('/users');
+                // Перевірка наявності старого пароля (passwordNew)
+                if (dataObj.passwordNew && dataObj.passwordNew !== '') {
+                    const match = await bcrypt.compare(dataObj.passwordNew, user.password);
+                    if (!match) {
+                        if (req.params.id) data.id = req.params.id
+                        // Якщо старий пароль неправильний
+                        return res.status(400).render('register', {
+                            errors: [{ msg: 'Old password is incorrect.' }],
+                            data: dataObj,
+                            types,
+                            user: req.user,
+                        });
+                    }
+
+                    // Якщо старий пароль правильний, перевіряємо новий пароль (password)
+                    if (dataObj.password && dataObj.password !== '') {
+                        // Хешуємо новий пароль перед збереженням
+                        const salt = await bcrypt.genSalt(10);
+                        dataObj.password = await bcrypt.hash(dataObj.password, salt);
+                    } else {
+                        // Якщо нового пароля немає, залишаємо старий
+                        delete dataObj.password;
+                    }
+
+                    // Видаляємо поле passwordNew після обробки
+                    delete dataObj.passwordNew;
+                } else {
+                    // Якщо старий пароль не надано, новий пароль не змінюється
+                    delete dataObj.password;
+                }
+
+                if (req.params.id) {
+                    // Оновлюємо дані про користувача в базі даних
+                    await UsersDBService.update(req.params.id, dataObj);
+                } else {
+                    // Додаємо користувача в базу даних
+                    await UsersDBService.create(dataObj);
+                }
+
+                res.redirect('/users');
+            }
         } catch (err) {
             res.status(500).render('register', {
                 errors: [{ msg: err.message }],
