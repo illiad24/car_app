@@ -3,6 +3,9 @@
     <ul>
       <li><a href="/">Home</a></li>
       <li><a href="/cars">Cars List</a></li>
+      <% if (!user ) { %>
+        <li><a href="/auth/signup">Sign  Up</a></li>
+        <% } %>
       <% if (user ) { %>
         <li><a href="/users">Users List</a></li>
         <% } %> <% if (user) { %>
