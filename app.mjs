@@ -1,5 +1,6 @@
 import express from 'express'
 import routes from './routes/index.mjs'
+
 import connectDB from './db/connectDB.mjs'
 import middleware from './middleware/index.mjs'
 import errorHandler from './middleware/errorHandler.mjs'

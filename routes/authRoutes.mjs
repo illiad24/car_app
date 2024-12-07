@@ -12,7 +12,7 @@ router.get('/login', (req, res) => {
 router.get('/signup', (req, res) => {
     res.render('auth/signup', { errors: null, formData: null })
 })
-
+  
 // Маршрут для обробки логіну
 router.post(
     '/login',

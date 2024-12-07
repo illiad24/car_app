@@ -20,12 +20,11 @@ const carSchema = new Schema({
     },
     price: {
         toInt: true,
-        type: String,
+        type: Number,
         required: [true, 'Заповніть поле "Ціна автомобіля"'],
     },
     carImg: {
         type: String,
-
     },
 
     dealer: {

@@ -1,18 +1,23 @@
 
 import CarsDBService from '../models/car/CarsDBService.mjs'
 import DealerDBService from '../models/dealers/DealerDBService.mjs'
-
+import QueryParser from '../utils/searchHelpers/QueryParser.mjs'
 import { validationResult } from 'express-validator'
 
 class CarsController {
     static async showCars(req, res) {
         try {
-            const dataList = await CarsDBService.getList()
-     
+        
+            const dataList = await CarsDBService.getList(req.query)
+           
             res.render('cars/carsList', {
                 cars: dataList,
                 user: req.user,
+                // searchParametrs: filters
             })
+
+            // Зробити інший роут щоб видавав дані
+            // res.json({ documents: dataList });
         } catch (err) {
             res.status(500).json({ error: err.message })
         }
@@ -23,7 +28,7 @@ class CarsController {
             const id = req.params.id
 
             const car = await CarsDBService.getById(id, ['dealer'])
-        
+
             res.render('cars/carDetails', { car, user: req.user, })
         } catch (err) {
             res.status(500).json({ error: err.message })
@@ -40,7 +45,7 @@ class CarsController {
         if (req.file?.buffer) {
             data.carImg = req.file.buffer.toString('base64')
         }
-  
+
         const dealerList = await DealerDBService.getList()
 
         if (!errors.isEmpty()) {
@@ -55,9 +60,7 @@ class CarsController {
         }
         try {
             const { title, year, carNumber, price, carImg, dealer } = req.body
-
             if (req.params.id) {
-                // Оновлюємо дані про користувача в базі даних
                 await CarsDBService.update(req.params.id, {
                     title,
                     year,
@@ -66,7 +69,6 @@ class CarsController {
                     carImg
                 })
             } else {
-                // Додаємо користувача в базу даних
                 await CarsDBService.create({ title, year, carNumber, price, carImg, dealer })
             }
             res.redirect('/cars')
@@ -87,17 +89,11 @@ class CarsController {
             res.status(500).json({ success: false, message: 'Failed to delete user' })
         }
     }
-
-    //========================================================================================================================================================
-
     static async createCar(req, res) {
         try {
-
-            //========================================================================================================================================================
             const id = req.params.id
             let car = null
             if (id) {
-                //отримати об"єкт за id
                 car = await CarsDBService.getById(id)
                 car.id = id
             }
@@ -105,7 +101,6 @@ class CarsController {
             res.render('cars/carsForm', {
                 car, errors: {}, dealerList, user: req.user,
             })
-            //========================================================================================================================================================
 
         } catch (error) {
             res.status(500).json({ error: err.message })

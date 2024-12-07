@@ -64,7 +64,7 @@ class UserController {
 
         try {
             const dataObj = req.body;
-            console.log(dataObj);
+          
 
             if (req.params.id) {
                 // Отримуємо користувача з бази даних для перевірки старого пароля

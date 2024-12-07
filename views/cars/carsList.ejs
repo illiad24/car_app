@@ -9,55 +9,264 @@
 </head>
 <body>
     <%- include('../sections/header') %>
+   
 
      <div class="container">
         <div class="title">Car List</div>
-         <div class="items">
-             <%cars.forEach(car=>{%>
-                <div class="cart-item  " >
-                    <div class="cart-item__block">
-                        <div class="cart-item__image">
-                            <img src="data:image;base64,<%=car.carImg%>" alt="Image">
-                        </div>
-                        <div class="cart-item__actions">
-                            <% if (user ) { %>
-                            <a href="/cars/edit/<%=car._id%>" type="button" class="cart-item__act">Edit</a>
-                            <button  onclick="RequestManager.deleteRequest('/cars', '<%= car._id %>' )" class="cart-item__act" >Delete</button>
-                            <% } %>
-                            <a href="/cars/<%=car._id%>" class="cart-item__act cart-item__act--transparent">More Details</a>
-                        </div>
+        <div class="filters">
+            <div class="filters__top">
+              
+                <div class="form-git__item">
+                    <div class="form-git__label label-form">
+                        Спосіб сортування
                     </div>
-                    <div class="cart-item__content content-cart">
-                        <a href="/cars/<%=car._id%>" class="content-cart__title"><%=car.title%> </a>
-                        <div class="content-cart__info">
-                            <div class="content-cart__item">
-                                <div class="content-cart__label">Year</div>
-                                <div class="content-cart__price"><%=car.year%></div>
-                            </div>
-                            <div class="content-cart__item">
-                                <div class="content-cart__label">Price</div>
-                                <div class="content-cart__price"><%=car.price%></div>
-                            </div>
-                            <div class="content-cart__item">
-                                <div class="content-cart__label">Dealer</div>
-                                <div class="content-cart__price"><%=car.dealer?.dealerName %></div>
-                            </div>
-                        </div>
+                    <div class="form-git__line">
+                       <select name="price" onchange="submitSearchForm()" id="priceSelect">
+                        <option value="price:asc"     >За зростанням ціни</option>
+                        <option value="price:desc"  >За спаданням ціни</option>
+                       </select>
                     </div>
                 </div>
-
-                 <%})%>
-
-         </div>
+            </div>
+        </div>
+        <div class="body">
+<form method="get" class="body__filters js-form">
+    <div class="form-git__item">
+        <div class="form-git__label label-form">
+            Назва
+        </div>
+        <div class="form-git__line">
+            <input  name="title" placeholder="Назва машини" class="input form-git__input">
+        </div>
+    </div>
+    <div class="form-git__item">
+        <div class="form-git__label label-form">
+            Ціна від
+        </div>
+        <div class="form-git__line">
+            <input  name="priceFrom" placeholder="Від" class="input form-git__input">
+        </div>
+    </div>
+    <div class="form-git__item">
+        <div class="form-git__label label-form">
+            Ціна до
+        </div>
+        <div class="form-git__line">
+            <input  name="priceTo" placeholder="До" class="input form-git__input">
+        </div>
+    </div>
+    <div class="form-git__item">
+        <div class="form-git__label label-form">
+           Дилер
+        </div>
+        <div class="form-git__line">
+           <div class="checkbox">
+            <input id="c_1" data-error="Помилка" class="checkbox__input" type="checkbox" value="bmw" name="dealer">
+            <label for="c_1" class="checkbox__label"><span class="checkbox__text">bmw</span></label>
+           </div>
+           <div class="checkbox">
+            <input id="c_2" data-error="Помилка" class="checkbox__input" type="checkbox" value="audi" name="dealer">
+            <label for="c_2" class="checkbox__label"><span class="checkbox__text">audi</span></label>
+           </div>
+        </div>
+    </div>
+    <button type="button" class="js-filter-button button">Застосувати</button>
+</form>
+            <div class="items">
+                <%cars.documents.forEach(car=>{%>
+                   <div class="cart-item  " >
+                       <div class="cart-item__block">
+                           <div class="cart-item__image">
+                               <img src="data:image;base64,<%=car.carImg%>" alt="Image">
+                           </div>
+                           <div class="cart-item__actions">
+                               <% if (user ) { %>
+                               <a href="/cars/edit/<%=car._id%>" type="button" class="cart-item__act">Edit</a>
+                               <button  onclick="RequestManager.deleteRequest('/cars', '<%= car._id %>' )" class="cart-item__act" >Delete</button>
+                               <% } %>
+                               <a href="/cars/<%=car._id%>" class="cart-item__act cart-item__act--transparent">More Details</a>
+                           </div>
+                       </div>
+                       <div class="cart-item__content content-cart">
+                           <a href="/cars/<%=car._id%>" class="content-cart__title"><%=car.title%> </a>
+                           <div class="content-cart__info">
+                               <div class="content-cart__item">
+                                   <div class="content-cart__label">Year</div>
+                                   <div class="content-cart__price"><%=car.year%></div>
+                               </div>
+                               <div class="content-cart__item">
+                                   <div class="content-cart__label">Price</div>
+                                   <div class="content-cart__price"><%=car.price%></div>
+                               </div>
+                               <div class="content-cart__item">
+                                   <div class="content-cart__label">Dealer</div>
+                                   <div class="content-cart__price"><%=car.dealer?.dealerName %></div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+   
+                    <%})%>
+   
+            </div>
+        </div>
          <% if (user ) { %>
          <div class="actions">
              <a href="/cars/create" class="button button--center">add car</a>
             </div>
             <% } %>
          <br>
-       
-
-      
      </div>
+     <script>
+         async function renderCars(data) {
+        const { documents, user }  = data;
+        // Оновлення списку машин
+        const itemsContainer = document.querySelector('.items');
+        if (!itemsContainer) {
+            console.error('Container for car items not found!');
+            return;
+        }
+        itemsContainer.innerHTML = ''; // Очищення поточного вмісту
+
+        documents.documents.forEach(car => {
+            const carHTML = `
+                <div class="cart-item">
+                    <div class="cart-item__block">
+                        <div class="cart-item__image">
+                            <img src="data:image;base64,${car.carImg}" alt="Image">
+                        </div>
+                        <div class="cart-item__actions">
+                            ${user ? `
+                                <a href="/cars/edit/${car._id}" type="button" class="cart-item__act">Edit</a>
+                                <button onclick="deleteCar('${car._id}')" class="cart-item__act">Delete</button>
+                            ` : ''}
+                            <a href="/cars/${car._id}" class="cart-item__act cart-item__act--transparent">More Details</a>
+                        </div>
+                    </div>
+                    <div class="cart-item__content content-cart">
+                        <a href="/cars/${car._id}" class="content-cart__title">${car.title}</a>
+                        <div class="content-cart__info">
+                            <div class="content-cart__item">
+                                <div class="content-cart__label">Year</div>
+                                <div class="content-cart__price">${car.year}</div>
+                            </div>
+                            <div class="content-cart__item">
+                                <div class="content-cart__label">Price</div>
+                                <div class="content-cart__price">${car.price}</div>
+                            </div>
+                            <div class="content-cart__item">
+                                <div class="content-cart__label">Dealer</div>
+                                <div class="content-cart__price">${car.dealer?.dealerName || ''}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            itemsContainer.insertAdjacentHTML('beforeend', carHTML);
+        });
+
+
+
+
+}
+// Отримання даних форми
+function getSearchFormDataId() {
+    const form = document.querySelector('.js-form');
+    const formData = new FormData(form);
+    const selectSort = document.querySelector('#priceSelect');
+    let object = {};
+
+    if (selectSort) {
+        object.sort = selectSort.value || null; // Додаємо сортування, якщо є
+    }
+
+    formData.forEach((value, key) => {
+        if (object[key]) {
+            if (!Array.isArray(object[key])) {
+                object[key] = [object[key]];
+            }
+            object[key].push(value);
+        } else {
+            object[key] = value;
+        }
+    });
+console.log(object)
+    // Видаляємо порожні значення
+    return Object.fromEntries(Object.entries(object).filter(([_, value]) => !!value));
+}
+
+// Формування query string
+function buildQueryParams() {
+    const form = document.querySelector('.js-form');
+    const formData = new FormData(form);
+    const params = [];
+
+    // Додаємо сортування, якщо воно вибране
+    const sortField = document.querySelector('#priceSelect');
+    if (sortField && sortField.value) {
+        params.push(`sort=${encodeURIComponent(sortField.value)}`);
+    }
+
+    // Обробляємо всі поля форми
+    formData.forEach((value, key) => {
+        if (value) {
+            if (key === 'priceFrom') {
+                params.push(`price=gte:${encodeURIComponent(value)}`);
+            } else if (key === 'priceTo') {
+                params.push(`price=lte:${encodeURIComponent(value)}`);
+            } else if (key === 'dealer') {
+                // Для полів з однаковими іменами, наприклад, чекбоксів
+                const existingParam = params.find(param => param.startsWith(`${key}=`));
+                if (existingParam) {
+                    const updatedParam = existingParam + `,${encodeURIComponent(value)}`;
+                    params[params.indexOf(existingParam)] = updatedParam;
+                } else {
+                    params.push(`${key}=${encodeURIComponent(value)}`);
+                }
+            } else {
+                params.push(`${key}=${encodeURIComponent(value)}`);
+            }
+        }
+    });
+
+    return params.join('&');
+}
+
+// Оновлення URL
+function rewriteUsedCarsUrl() {
+    const queryParams = buildQueryParams();
+    const currentUrl = window.location.origin + window.location.pathname;
+    const updatedUrl = `${currentUrl}${queryParams ? '?' + queryParams : ''}`;
+
+    // Оновлюємо URL в історії браузера
+    window.history.pushState({}, '', updatedUrl);
+}
+
+// Відправлення форми
+async function submitSearchForm() {
+    rewriteUsedCarsUrl();
+    const queryParams = buildQueryParams(); // Отримуємо query string
+console.log(queryParams)
+    try {
+        const response = await fetch(`/api/cars?${queryParams}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        renderCars(result); // Функція для відображення автомобілів
+    } catch (error) {
+        console.error('Error fetching cars:', error);
+    }
+}
+
+// Додавання обробників подій
+document.querySelector('.js-filter-button').addEventListener('click', submitSearchForm);
+document.querySelector('#priceSelect').addEventListener('change', submitSearchForm);
+
+
+     </script>
 </body>
 </html>

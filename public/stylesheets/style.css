@@ -69,7 +69,7 @@ a {
 
 .items {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     column-gap: 16px;
     row-gap: 32px;
     margin-bottom: 40px;
@@ -406,4 +406,26 @@ a {
 
 .label-form span {
     color: red;
+}
+
+.filters {
+    margin-bottom: 32px;
+}
+
+.filters__top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 32px;
+}
+
+.body {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: 300px 1fr;
+}
+
+.body .input {
+    min-height: 40px;
+    max-width: 240px;
 }
