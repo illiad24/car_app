@@ -22,6 +22,16 @@ class RequestManager {
         const data = await response.json()
         return data
     }
+    static async getRequest(route) {
+        const response = await fetch(route, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        // window.location.reload(true)
+    }
+
 
     static async deleteRequest(route, id) {
         const response = await fetch(route, {

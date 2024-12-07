@@ -10,7 +10,7 @@ import upload from '../middleware/UploadManager.mjs'
 
 //---- обробка шляху '/'
 router.get('/', CarsController.showCars)
-router.get('/create', CarsController.createCar)
+router.get('/create', ensureAuthenticated, ensureAdmin, CarsController.createCar)
 router.post('/create', ensureAuthenticated, ensureAdmin, upload.single('carImg'), checkSchema(CarFormValidator.schemaCarValidator), CarsController.addCar)
 
 router.get('/edit/:id', CarsController.createCar)

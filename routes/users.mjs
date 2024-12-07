@@ -7,13 +7,13 @@ import { ensureAuthenticated, ensureSuperAdmin } from '../middleware/auth.mjs'
 
 const router = express.Router()
 
-router.get('/', UserController.usersList)
+router.get('/', ensureAuthenticated, ensureSuperAdmin, UserController.usersList)
 
-router.get('/register/:id?', UserController.registerForm)
+router.get('/register/:id?', ensureAuthenticated, ensureSuperAdmin, UserController.registerForm)
 
 router.post(
     '/register/:id?',
-
+    ensureAuthenticated, ensureSuperAdmin,
     checkSchema(UserValidator.userSchema),
     UserController.registerUser
 )

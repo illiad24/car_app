@@ -8,7 +8,7 @@ class AuthController {
 
         const errors = validationResult(req)
         const { email } = req.body
-        console.log(req.body)
+   
         if (!errors.isEmpty()) {
             return res.status(400).render("auth/login", {
                 formData: { email },
@@ -31,7 +31,7 @@ class AuthController {
 
     static async signup(req, res, next) {
         const data = req.body
-        console.log(data)
+      
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
             return res.status(400).render("auth/signup", {
