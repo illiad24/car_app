@@ -41,14 +41,14 @@ class MongooseCRUDManager {
         try {
             // Створення базового запиту для пошуку багатьох документів
             let query = this.model.find({}, projection)
-
+            query.limit(6)
             // Застосування фільтрів пошуку з reqQuery та налаштувань полів за допомогою FiltersHelper
             query = FiltersHelper.applyFiltersOptionsFromQuery(
                 reqQuery,
                 fieldsConfiguration,
                 query
             )
-            console.log(query)
+            // console.log(query)
             // Підрахунок кількості документів, що відповідають фільтрам
             const count = await this.model.countDocuments(query)
 

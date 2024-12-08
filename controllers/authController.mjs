@@ -2,13 +2,14 @@
 import passport from 'passport'
 import { validationResult } from 'express-validator'
 import UsersDBService from '../models/user/UsersDBService.mjs'
+import mongoose from 'mongoose'
 class AuthController {
 
     static login(req, res, next) {
 
         const errors = validationResult(req)
         const { email } = req.body
-   
+
         if (!errors.isEmpty()) {
             return res.status(400).render("auth/login", {
                 formData: { email },
@@ -31,7 +32,7 @@ class AuthController {
 
     static async signup(req, res, next) {
         const data = req.body
-      
+
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
             return res.status(400).render("auth/signup", {
@@ -40,6 +41,14 @@ class AuthController {
             })
         }
         try {
+            // Знайти документ типу "user"
+            const userType = await mongoose.model('Type').findOne({ title: 'admin' });
+            if (!userType) {
+                throw new Error('Тип "user" не знайдено');
+            }
+
+            // Встановити дефолтний тип
+            data.type = userType._id;
             const user = await UsersDBService.create(data)
             req.login(user, (err) => {
                 if (err) return next(err)

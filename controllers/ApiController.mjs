@@ -4,6 +4,8 @@ import CarsDBService from '../models/car/CarsDBService.mjs'
 class ApiController {
     static async getFilterCarDtaa(req, res) {
         try {
+            console.log('req.query')
+            console.log(req.query)
             const dataList = await CarsDBService.getList(req.query)
 
             const user = req.user || null; // Передаємо `user`, якщо він є

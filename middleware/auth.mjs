@@ -12,8 +12,10 @@ export function ensureAdmin(req, res, next) {
     res.redirect('/')
 }
 export function ensureSuperAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.type.title === 'superAdmin') {
+    if (req.isAuthenticated()) {
         return next()
     }
     res.redirect('/')
 }
+
+// && req.user.type.title === 'superAdmin'

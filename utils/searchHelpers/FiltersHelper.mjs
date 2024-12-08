@@ -6,7 +6,6 @@ class FiltersHelper {
         filters.forEach((filter) => {
             switch (filter.filterType) {
                 case 'search':
-                    console.log(1)
                     // Застосовуємо пошуковий фільтр з регулярним виразом
                     query
                         .where(filter.fieldName)
@@ -21,10 +20,6 @@ class FiltersHelper {
                     query.where(filter.fieldName).lte(filter.filterContent)
                     break
                 case 'in':
-                    console.log('filter.fieldName')
-                    console.log(filter.fieldName)
-                    console.log('filter.filterContent')
-                    console.log(filter.filterContent)
                     // Фільтр для значень, що входять у список
                     query.where(filter.fieldName).in(filter.filterContent)
                     break
