@@ -15,7 +15,6 @@
         <div class="title">Car List</div>
         <div class="filters">
             <div class="filters__top">
-              
                 <div class="form-git__item">
                     <div class="form-git__label label-form">
                         Спосіб сортування
@@ -109,6 +108,7 @@
                     <%})%>
    
             </div>
+            <div class="load-more">load more</div>
         </div>
          <% if (user ) { %>
          <div class="actions">
@@ -118,7 +118,7 @@
          <br>
      </div>
      <script>
-         async function renderCars(data) {
+         async function renderCars(data,pushCar=false) {
         const { documents, user }  = data;
         // Оновлення списку машин
         const itemsContainer = document.querySelector('.items');
@@ -126,7 +126,9 @@
             console.error('Container for car items not found!');
             return;
         }
-        itemsContainer.innerHTML = ''; // Очищення поточного вмісту
+        if(!pushCar){
+            itemsContainer.innerHTML = ''; 
+        }
 
         documents.documents.forEach(car => {
             const carHTML = `
@@ -266,6 +268,71 @@ console.log(queryParams)
 document.querySelector('.js-filter-button').addEventListener('click', submitSearchForm);
 document.querySelector('#priceSelect').addEventListener('change', submitSearchForm);
 
+let page = 0;
+const limit = 6; // Кількість карток за один запит
+let hasMore = true; // Чи є ще картки у базі
+let loaded =false
+const loadMore = document.querySelector('.load-more');
+
+// Завантаження карток
+async function loadCards() {
+  if (!hasMore||loaded) return;
+console.log(1)
+loaded = true;
+  try {
+    const response = await fetch(`/api/cars?page=${page}&perPage=${limit}`);
+    const data = await response.json();
+    
+    if (page <= 0) {
+      renderCars(data, false); // Для першої сторінки
+    } else {
+      renderCars(data, true);  // Для наступних сторінок
+    }
+console.log(data)
+    // Перевірка, чи є ще документи
+    if (data.documents.documents.length) {
+      hasMore = true;
+      loadMore.style.opacity=0
+    } else {
+      hasMore = false;
+    }
+console.log(hasMore)
+    page += 1;
+  } catch (err) {
+    console.error('Помилка завантаження карток:', err);
+  } finally{
+    loaded = false
+  }
+}
+
+
+
+function checkVisibilityAndLoad() {
+    if (isVisible('.load-more') ) {
+        loadCards();
+    }
+}
+
+function isVisible(selector) {
+    const element = document.querySelector(selector);
+    if (!element) {
+        return false;
+    }
+
+    let style = window.getComputedStyle(element);
+    if (style.display === 'none') {
+        return false;
+    }
+    const rect = element.getBoundingClientRect();
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    // Перевірка, чи хоч якась частина елемента у видимій області
+    return rect.bottom > 0 && rect.top < windowHeight;
+}
+// Додавання обробника подій для скролу
+window.addEventListener('scroll', checkVisibilityAndLoad);
+
+// Початкове завантаження
+loadCards();
 
      </script>
 </body>
